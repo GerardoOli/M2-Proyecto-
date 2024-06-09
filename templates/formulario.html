@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clasificador de Insectos</title>
+    <script>
+        function clasificarInsecto(event) {
+            event.preventDefault();
+            const time = document.getElementById('time').value;
+            const cd420 = document.getElementById('cd420').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `time=${time}&cd420=${cd420}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('resultado').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('resultado').innerText = 'infección por el virus del SIDA: ' + (data.Infección ? 'Sí' : 'No');
+                }
+            })
+            .catch(error => {
+                document.getElementById('resultado').innerText = 'Error en la solicitud.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Predicción de infección por el virus del SIDA</h1>
+    <form id="formulario" onsubmit="clasificarInsecto(event)">
+        <label for="time">Tiempo del tratamiento que ha llevado en días:</label>
+        <input type="text" id="time" name="time"><br><br>
+        <label for="cd420">Células CD4 (cd420):</label>
+        <input type="text" id="cd420" name="cd420"><br><br>
+        <input type="submit" value="Enviar">
+    </form>
+    <p id="resultado"></p>
+</body>
+</html>
