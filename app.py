@@ -5,7 +5,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Cargar el modelo entrenado
-model = joblib.load('modelRf_2_.pkl')
+model = joblib.load('decision_tree_model.pkl')
 
 @app.route('/')
 def home():
@@ -20,15 +20,15 @@ def predict():
     try:
         # Obtener los datos enviados en el request
         hour = float(request.form['Hour'])
-        temperature = float(request.form['Temperature'])
-        humidity = float(request.form['Humidity'])
-        dew_point_temperature = float(request.form['DewPointTemperature'])
+        rainfall = float(request.form['Rainfall(mm)'])
+        humidity = float(request.form['Humidity(%)'])
+        temperature = float(request.form['Temperature(°C)'])
         seasons = float(request.form['Seasons'])
-        functioning_day = float(request.form['FunctioningDay'])
+        functioning_day = float(request.form['Functioning Day'])
         
         # Crear un DataFrame con los datos
-        data_df = pd.DataFrame([[hour, temperature, humidity, dew_point_temperature, seasons, functioning_day]], 
-                               columns=['Hour', 'Temperature', 'Humidity', 'DewPointTemperature', 'Seasons', 'FunctioningDay'])
+        data_df = pd.DataFrame([[hour, rainfall, humidity, temperature, seasons, functioning_day]], 
+                               columns=['Hour', 'Rainfall(mm)', 'Humidity(%)', 'Temperature(°C)', 'Seasons', 'Functioning Day'])
         
         # Realizar predicciones
         prediction = model.predict(data_df)
@@ -43,4 +43,3 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
