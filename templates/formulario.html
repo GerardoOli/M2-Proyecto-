@@ -2,52 +2,53 @@
 <html>
 <head>
     <title>Predicción de demanda de bicicletas en Seúl</title>
-<script>
-    function enviarDatos(event) {
-        event.preventDefault(); // Evitar el envío tradicional del formulario
-        const hour = document.getElementById('hour').value;
-        const temperature = document.getElementById('temperature').value;
-        const humidity = document.getElementById('humidity').value;
-        const dewPointTemperature = document.getElementById('dewPointTemperature').value;
-        const seasons = document.getElementById('seasons').value;
-        const functioningDay = document.getElementById('functioningDay').value;
+    <script>
+        function enviarDatos(event) {
+            event.preventDefault(); // Evitar el envío tradicional del formulario
+            const hour = document.getElementById('hour').value;
+            const rainfall = document.getElementById('rainfall').value;
+            const humidity = document.getElementById('humidity').value;
+            const temperature = document.getElementById('temperature').value;
+            const seasons = document.getElementById('seasons').value;
+            const functioningDay = document.getElementById('functioningDay').value;
 
-        fetch('/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `Hour=${hour}&Temperature=${temperature}&Humidity=${humidity}&DewPointTemperature=${dewPointTemperature}&Seasons=${seasons}&FunctioningDay=${functioningDay}`,
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('resultado').innerText = 'Predicción: ' + data['Rented Bike Count'];
-        })
-        .catch(error => {
-            document.getElementById('resultado').innerText = 'Error en la solicitud.';
-            console.error('Error:', error);
-        });
-    }
-</script>
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `Hour=${hour}&Rainfall(mm)=${rainfall}&Humidity(%)=${humidity}&Temperature(°C)=${temperature}&Seasons=${seasons}&Functioning Day=${functioningDay}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('resultado').innerText = 'Predicción: ' + data['Rented Bike Count'];
+            })
+            .catch(error => {
+                document.getElementById('resultado').innerText = 'Error en la solicitud.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Predicción de demanda de bicicletas en Seúl</h1>
     <form id="formulario" onsubmit="enviarDatos(event)">
         <label for="hour">Hora:</label>
         <input type="text" id="hour" name="Hour"><br><br>
-        <label for="temperature">Temperatura (°C):</label>
-        <input type="text" id="temperature" name="Temperature"><br><br>
+        <label for="rainfall">Lluvia (mm):</label>
+        <input type="text" id="rainfall" name="Rainfall(mm)"><br><br>
         <label for="humidity">Humedad (%):</label>
-        <input type="text" id="humidity" name="Humidity"><br><br>
-        <label for="dewPointTemperature">Temperatura de punto de rocío (°C):</label>
-        <input type="text" id="dewPointTemperature" name="DewPointTemperature"><br><br>
+        <input type="text" id="humidity" name="Humidity(%)"><br><br>
+        <label for="temperature">Temperatura (°C):</label>
+        <input type="text" id="temperature" name="Temperature(°C)"><br><br>
         <label for="seasons">Estación:</label>
         <input type="text" id="seasons" name="Seasons"><br><br>
         <label for="functioningDay">Día de funcionamiento:</label>
-        <input type="text" id="functioningDay" name="FunctioningDay"><br><br>
+        <input type="text" id="functioningDay" name="Functioning Day"><br><br>
         <input type="submit" value="Enviar">
     </form>
     <p id="resultado"></p>
 </body>
 </html>
+
 
